@@ -1,0 +1,82 @@
+<html>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div>
+                {% for category, message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+<head>
+    <title>Результаты анализа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .results-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Топ-50 слов (сортировка по IDF ↓, при равных IDF по TF ↓)</h1>
+    
+    <div class="results-container">
+        <table>
+            <tr>
+                <th>Слово</th>
+                <th>TF</th>
+                <th class="idf-column">IDF</th>
+                <th>*Мера TF-IDF</th>
+                <th>Документ</th>
+            </tr>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.word }}</td>
+                <td>{{ "%.4f"|format(item.tf) }}</td>
+                <td class="idf-column">{{ "%.4f"|format(item.idf) }}</td>
+                <td>{{ "%.4f"|format(item.tfidf) }}</td>
+                <td>{{ item.doc_id }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        
+        <div>
+            <a href="{{ url_for('uploads') }}" class="back-button">Назад</a>
+        </div>
+    </div>
+</body>
+</html>
